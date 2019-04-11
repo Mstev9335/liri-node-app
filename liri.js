@@ -15,11 +15,11 @@ var userInput = process.argv[3];
 // switch case
 switch (option) {
     case "concert-this":
-        concert();
+        concert(userInput);
         break;
 
     case "spotify-this-song":
-        spotify();
+        song(userInput);
         break;
 
     case "movie-this":
@@ -64,16 +64,37 @@ function concert(artist) {
 
 
 //   spotify-this-song function
-// client id: d438fdbb8059473182f03e8ac75e0981
-// client secret: 806a6a16a54f4319b8057b3d3fd72900
-function spotify() {
-    // artists
-    // songs name
-    // preview link of song from spotify
-    // album song is from
+function song(userInput) {
+    var spotify = new Spotify(keys.spotify);
 
-    // defaults to ace of base "the sign"
-}
+    // check if user entered song, if not default to "the sign" 
+    if (!userInput) {
+        userInput = "The Sign";
+    };
+
+    console.log(userInput);
+
+    // search spotify for the song name
+    spotify.search({
+        type: "track",
+        query: userInput
+    },
+        function (err, data) {
+            if (err) {
+                return console.log('Error occurred: ' + err);
+            }
+
+            var songs = data.tracks.items;
+            for (var i = 0; i < songs.length; i++) {
+                console.log("Song name: " + songs[i].name);
+                console.log("Artist(s): " + songs[i].artists[0].name);
+                console.log("Preview song: " + songs[i].preview_url);
+                console.log("Album: " + songs[i].album.name);
+                console.log("---------------------");
+            }
+
+        });
+};
 
 
 //   movie-this function
@@ -83,9 +104,10 @@ function movie(userInput) {
     if (userInput === undefined) {
         userInput = "Mr. Nobody";
     }
-console.log(userInput);
+    console.log(userInput);
     axios.get("http://www.omdbapi.com/?t=" + userInput + "&y=&plot=short&apikey=trilogy").then(
         function (response) {
+            
             //   console.log(response.data);
             console.log("Movie Info: ");
             console.log("------------------");
@@ -96,7 +118,7 @@ console.log(userInput);
             console.log("The movie's language is: " + response.data.Language);
             console.log("The movie's plot is: " + response.data.Plot);
             console.log("The movie's actors are: " + response.data.Actors);
-             console.log("------------------");
+            console.log("------------------");
         }
     );
 
