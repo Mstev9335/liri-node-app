@@ -16,51 +16,52 @@ var option = process.argv[2];
 // argument to be searched
 var userInput = process.argv[3];
 
-// switch case
-switch (option) {
-    case "concert-this":
-        concert(userInput);
-        break;
+function options(option, userInput) {
+    // switch case
+    switch (option) {
+        case "concert-this":
+            concert(userInput);
+            break;
 
-    case "spotify-this-song":
-        song(userInput);
-        break;
+        case "spotify-this-song":
+            song(userInput);
+            break;
 
-    case "movie-this":
-        movie(userInput);
-        break;
+        case "movie-this":
+            movie(userInput);
+            break;
 
-    case "do-what-it-says":
-        doWhat();
-        break;
+        case "do-what-it-says":
+            doWhat();
+            break;
 
-    default:
-        console.log("invalid selection");
+        default:
+            console.log("invalid selection");
+    }
 }
-
-// ==================== functions =================================
+// ======================= functions ==================================
 
 // concert-this function
-function concert(userInput){
+function concert(userInput) {
     console.log(userInput);
     var queryUrl = "https://rest.bandsintown.com/artists/" + userInput + "/events?app_id=codingbootcamp";
-    request(queryUrl, function(error, response, body) {
-    // If the request is successful
-    if (!error && response.statusCode === 200) {
-        var concerts = JSON.parse(body);
-        for (var i = 0; i < concerts.length; i++) { 
-            console.log("Events: ");
-            console.log("----------------------------")   
-            console.log("Name of Venue: " + concerts[i].venue.name);
-            console.log("Venue Location: " +  concerts[i].venue.city);
-            console.log("Date of the Event: " +  concerts[i].datetime);
-            console.log("----------------------------");
+    request(queryUrl, function (error, response, body) {
+        // If the request is successful
+        if (!error && response.statusCode === 200) {
+            var concerts = JSON.parse(body);
+            for (var i = 0; i < concerts.length; i++) {
+                console.log("Events: ");
+                console.log("----------------------------")
+                console.log("Name of Venue: " + concerts[i].venue.name);
+                console.log("Venue Location: " + concerts[i].venue.city);
+                console.log("Date of the Event: " + concerts[i].datetime);
+                console.log("----------------------------");
+            }
+        } else {
+            console.log('Error');
         }
-    } else{
-      console.log('Error');
-    }
-});}
-
+    });
+}
 
 //   spotify-this-song function
 function song(userInput) {
@@ -94,10 +95,8 @@ function song(userInput) {
                 console.log("Album: " + songs[i].album.name);
                 console.log("---------------------");
             }
-
         });
 };
-
 
 //   movie-this function
 function movie(userInput) {
@@ -110,23 +109,51 @@ function movie(userInput) {
     axios.get("http://www.omdbapi.com/?t=" + userInput + "&y=&plot=short&apikey=trilogy").then(
         function (response) {
 
-            //   console.log(response.data);
+            console.log(response.data);
+
+            // get rotten tomatoes score
+            var rotten = JSON.stringify(response.data.Ratings[1].Value);
+
             console.log("Movie Info: ");
             console.log("------------------");
-            console.log("The movie's title is: " + response.data.Title);
-            console.log("The movie's year is: " + response.data.Year);
-            console.log("The movie's rating is: " + response.data.imdbRating);
-            console.log("The movie's country of release is: " + response.data.Country);
-            console.log("The movie's language is: " + response.data.Language);
-            console.log("The movie's plot is: " + response.data.Plot);
-            console.log("The movie's actors are: " + response.data.Actors);
+            console.log("Title: " + response.data.Title);
+            console.log("Release Year: " + response.data.Year);
+            console.log("IMDB rating: " + response.data.imdbRating);
+            console.log("Rotten Tomatoes rating: " + rotten);
+            console.log("Country of release: " + response.data.Country);
+            console.log("Language: " + response.data.Language);
+            console.log("Plot: " + response.data.Plot);
+            console.log("Actors: " + response.data.Actors);
             console.log("------------------");
         }
     );
-
 }
 
 // do-what-it-says function
 function doWhat() {
     // spotify-this-song the song from the random.txt file
+    fs.readFile("random.txt", "utf8", function (error, data) {
+
+        // If the code experiences any errors it will log the error to the console.
+        if (error) {
+            return console.log(error);
+        }
+
+        // We will then print the contents of data
+        // console.log(data);
+
+        // split by comma
+        var dataArr = data.split(",");
+
+        // We will then re-display the content as an array for later use.
+        console.log(dataArr);
+        // console.log(dataArr[0]);
+        // console.log(dataArr[1]);
+
+        options(dataArr[0], dataArr[1]);
+
+    });
+
 }
+
+options(option, userInput); 
