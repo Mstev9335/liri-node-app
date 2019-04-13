@@ -9,7 +9,11 @@ var Spotify = require('node-spotify-api');
 var spotify = new Spotify(keys.spotify);
 var axios = require("axios");
 
+// arguments
+// liri command
 var option = process.argv[2];
+
+// argument to be searched
 var userInput = process.argv[3];
 
 // switch case
@@ -37,38 +41,34 @@ switch (option) {
 // ==================== functions =================================
 
 // concert-this function
-
-function concert(artist) {
-    // Add code to query the bands in town api searching for the artist received as an argument to this function
-
-    var queryURL = "https://rest.bandsintown.com/artists/" + artist + "?app_id=codingbootcamp";
-    $.ajax({
-        url: queryURL,
-        method: "GET"
-    }).then(function (response) {
-        console.log(response);
-
-        var artistName = $("<h1>").text(response.name);
-        var artistURL = $("<a>").attr("href", response.url).append(artistName);
-        var artistImage = $("<img>").attr("src", response.thumb_url);
-        var trackerCount = $("<h2>").text(response.tracker_count + " fans tracking this artist");
-        var upcomingEvents = $("<h2>").text(response.upcoming_event_count + " upcoming events");
-        var goToArtist = $("<a>").attr("href", response.url).text("See Tour Dates");
-
-        // Empty the contents of the artist-div, append the new artist content
-        $("#artist-div").empty();
-        $("#artist-div").append(artistURL, artistImage, trackerCount, upcomingEvents, goToArtist);
-    });
-
-}
+function concert(userInput){
+    console.log(userInput);
+    var queryUrl = "https://rest.bandsintown.com/artists/" + userInput + "/events?app_id=codingbootcamp";
+    request(queryUrl, function(error, response, body) {
+    // If the request is successful
+    if (!error && response.statusCode === 200) {
+        var concerts = JSON.parse(body);
+        for (var i = 0; i < concerts.length; i++) { 
+            console.log("Events: ");
+            console.log("----------------------------")   
+            console.log("Name of Venue: " + concerts[i].venue.name);
+            console.log("Venue Location: " +  concerts[i].venue.city);
+            console.log("Date of the Event: " +  concerts[i].datetime);
+            console.log("----------------------------");
+        }
+    } else{
+      console.log('Error');
+    }
+});}
 
 
 //   spotify-this-song function
 function song(userInput) {
     var spotify = new Spotify(keys.spotify);
 
-    // check if user entered song, if not default to "the sign" 
-    if (!userInput) {
+    // check if user entered song
+    //  if not default to "the sign" 
+    if (userInput === undefined) {
         userInput = "The Sign";
     };
 
@@ -81,11 +81,13 @@ function song(userInput) {
     },
         function (err, data) {
             if (err) {
-                return console.log('Error occurred: ' + err);
+                return console.log('Error: ' + err);
             }
 
             var songs = data.tracks.items;
             for (var i = 0; i < songs.length; i++) {
+                console.log("Spotify Info: ")
+                console.log("--------------------")
                 console.log("Song name: " + songs[i].name);
                 console.log("Artist(s): " + songs[i].artists[0].name);
                 console.log("Preview song: " + songs[i].preview_url);
@@ -107,7 +109,7 @@ function movie(userInput) {
     console.log(userInput);
     axios.get("http://www.omdbapi.com/?t=" + userInput + "&y=&plot=short&apikey=trilogy").then(
         function (response) {
-            
+
             //   console.log(response.data);
             console.log("Movie Info: ");
             console.log("------------------");
