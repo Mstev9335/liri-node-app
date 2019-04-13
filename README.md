@@ -9,3 +9,6 @@ This application allows the user to enter in command line arguments and receive 
 * Bands in Town API
 * Spotify API
 * OMDB API
+
+![concert-this functionality](/screenshots/concert-this.png)
+Format: ![Alt Text](url)
