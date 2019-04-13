@@ -10,5 +10,17 @@ This application allows the user to enter in command line arguments and receive 
 * Spotify API
 * OMDB API
 
+##Concert-this functionality
 ![concert-this functionality](/screenshots/concert-this.png)
-Format: ![Alt Text](url)
+
+
+##Spotify-this functionality
+![spotify-this functionality](/screenshots/spotify-this.png)
+
+
+##Movie-this functionality
+![movie-this functionality](/screenshots/movie-this.png)
+
+
+##Do-what-it-says functionality
+![do-what-it-says functionality](/screenshots/do-what-it-says1.png)
