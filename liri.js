@@ -109,7 +109,7 @@ function movie(userInput) {
     axios.get("http://www.omdbapi.com/?t=" + userInput + "&y=&plot=short&apikey=trilogy").then(
         function (response) {
 
-            console.log(response.data);
+            // console.log(response.data);
 
             // get rotten tomatoes score
             var rotten = JSON.stringify(response.data.Ratings[1].Value);
