@@ -14,11 +14,39 @@ This application allows the user to enter in Node.js command line arguments and 
 1. You first need to clone this repo to your local computer
 2. You need to obtain Spotify API keys to make the Spotify LIRI command functional
 3. You then need to create a .env file that will contain the Spotifiy API keys in the root directory of this cloned repo
-Setup your .env file with the following lines of code:
+4. Setup your .env file with the following lines of code:
 ```javascript
 
 SPOTIFY_ID=<your spotify id here>
 SPOTIFY_SECRET=<your spotify secret here>
+
+```
+5. You will then be able to run the various LIRI commands from within your terminal
+#### Return the next upcoming concert for the searched for artist or band:
+```javascript
+
+$ node liri.js concert-this <search artist/band name here>
+
+```
+
+#### Return information about the searched for movie:
+```javascript
+
+$ node liri.js movie-this <search movie name here> 
+
+```
+
+#### Return information about the searched for song:
+```javascript
+
+$ node liri.js spotify-this-song <search song name here> 
+
+```
+
+#### This will read the included random.txt file and use the value read from the file to perform one of the LIRI commands:
+```javascript
+
+$ node liri.js do-what-it-says 
 
 ```
 
